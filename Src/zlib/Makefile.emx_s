@@ -1,0 +1,58 @@
+prefix = f:/emx
+exec_prefix = c:/bin
+
+INCDIR = $(prefix)/include
+LIBDIR = ${prefix}/lib
+DLLDIR = ${prefix}/dll
+BINDIR = ${exec_prefix}/bin
+
+CC=gcc
+
+CFLAGS= -s -O2 -fomit-frame-pointer -mprobe -Zmt -I.
+
+LDFLAGS=os2/exedefault.def -s -L. -lz -Zbin-files
+
+VER=1.2.3
+
+SHELL=sh
+
+OBJS = adler32.o compress.o crc32.o gzio.o uncompr.o deflate.o trees.o \
+       zutil.o inflate.o infback.o inftrees.o inffast.o
+
+all: z.lib example.exe minigzip.exe
+
+z.a: $(OBJS)
+	ar crs $@ $(OBJS)
+
+z.lib: z.a
+	emxomf -s -l -q z.a 
+
+z.dll: $(OBJS)
+	emximp -o z.a zos2.def
+	emximp -o z.lib zos2.def
+	${CC} -s -o z.dll $(OBJS) zos2.def -Zomf -Zdll -Zmtd
+
+example.exe: example.o z.a
+	$(CC) $(CFLAGS) -o $@ example.o $(LDFLAGS)
+
+minigzip.exe: minigzip.o z.a
+	$(CC) $(CFLAGS) -o $@ minigzip.o $(LDFLAGS)
+
+install: z.lib minigzip.exe
+	@install -d $(INCDIR)
+	@install -d $(LIBDIR)
+	@install -d $(DLLDIR)
+	@install -d $(BINDIR)
+	install -c zlib.h zconf.h $(INCDIR)
+	install -c z.a z.lib $(LIBDIR)
+	install -c z.dll $(DLLDIR)
+	install -c minigzip.exe $(BINDIR)
+
+clean:
+	rm -f *.o *~ example.exe minigzip.exe *.a *.lib *.dll
+
+#
+release:
+	$(MAKE) -f Makefile.emx install clean prefix=f:/release/zlib \
+		exec_prefix=f:/release/zlib
+

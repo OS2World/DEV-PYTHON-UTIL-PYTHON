@@ -1,0 +1,111 @@
+# Makefile for gdbm and emx+gcc under OS/2
+
+CC = gcc -O -s
+#CC = gcc -g
+
+CFLAGS = -DSYSV -DOS2 -D__ST_MT_ERRNO__
+LDFLAGS =
+
+DBM_CF = dbminit.c delete.c fetch.c store.c seq.c
+NDBM_CF = dbmopen.c dbmdelete.c dbmfetch.c dbmstore.c dbmseq.c \
+	dbmclose.c dbmdirfno.c dbmpagfno.c
+GDBM_CF = gdbmopen.c gdbmdelete.c gdbmfetch.c gdbmstore.c gdbmclose.c \
+	gdbmreorg.c gdbmseq.c gdbmsync.c gdbmsetopt.c gdbmerrno.c gdbmexists.c \
+	bucket.c falloc.c findkey.c global.c hash.c update.c version.c
+HFILES = gdbmdefs.h extern.h gdbmerrno.h systems.h dbm.h ndbm.h gdbmconst.h
+
+MSCFILES = COPYING ChangeLog Makefile README gdbm.proto conv2gdbm.c
+TESTFILES = testdbm.c testndbm.c testgdbm.c
+
+DBM_OF = dbminit.o delete.o fetch.o store.o seq.o
+NDBM_OF = dbmopen.o dbmdelete.o dbmfetch.o dbmstore.o dbmseq.o \
+	dbmclose.o dbmdirfno.o dbmpagfno.o
+GDBM_OF = gdbmopen.o gdbmdelete.o gdbmfetch.o  gdbmstore.o gdbmclose.o \
+	gdbmreorg.o gdbmseq.o gdbmsync.o gdbmsetopt.o gdbmerrno.o gdbmexists.o \
+	bucket.o falloc.o findkey.o global.o hash.o update.o version.o
+
+default:
+	@echo "make gdbm.a" to make the library
+	@echo "make testgdbm.exe" to make the gdbm test program
+	@echo "make testdbm.exe" to make the dbm compatability test program
+	@echo "make testndbm.exe" to make the ndbm compatability test program
+	@echo "make all" to make all of the above
+
+all:	autoconf.h gdbm.a testgdbm.exe testdbm.exe testndbm.exe
+
+autoconf.h: autoconf.h.os2
+	copy autoconf.h.os2 $@
+
+gdbm.a: $(DBM_OF) $(NDBM_OF) $(GDBM_OF) gdbm.h
+	rm -f $@
+	ar crv $@ $(DBM_OF) $(NDBM_OF) $(GDBM_OF)
+	ar sv $@
+	emxomf -o gdbm.lib gdbm.a
+
+gdbm.h:	gdbm.proto gdbmerrno.h
+	cp gdbm.proto gdbm.h
+	grep _ gdbmerrno.h >> gdbm.h
+	cat gdbm.proto2 >> gdbm.h
+
+testgdbm.exe: testgdbm.o gdbm.a
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ testgdbm.o gdbm.a
+
+testdbm.exe: testdbm.o gdbm.a
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ testdbm.o gdbm.a
+
+testndbm.o: testndbm.c
+	$(CC) $(CFLAGS) -c -DGNU testndbm.c
+
+testndbm.exe: testndbm.o gdbm.a
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ testndbm.o gdbm.a
+
+clean:
+	rm -f $(DBM_OF) $(NDBM_OF) $(GDBM_OF) \
+	testdbm.o testndbm.o testgdbm.o junk*
+
+realclean: clean
+	rm -f gdbm.h gdbm.a gdbm.lib \
+	testdbm.exe testndbm.exe testgdbm.exe
+
+# dbm files
+dbminit.o:	gdbmdefs.h extern.h gdbmerrno.h
+delete.o:	gdbmdefs.h extern.h
+fetch.o:	gdbmdefs.h extern.h
+store.o:	gdbmdefs.h extern.h
+seq.o:		gdbmdefs.h extern.h
+
+# ndbm files
+dbmopen.o:	gdbmdefs.h extern.h gdbmerrno.h
+dbmdelete.o:	gdbmdefs.h extern.h
+dbmfetch.o:	gdbmdefs.h extern.h
+dbmstore.o:	gdbmdefs.h extern.h
+dbmseq.o:	gdbmdefs.h extern.h
+dbmclose.o:	gdbmdefs.h systems.h
+dbmpagfno.o:	gdbmdefs.h extern.h
+dbmdirfno.o:	gdbmdefs.h extern.h
+
+# gdbm files
+gdbmclose.o:	gdbmdefs.h
+gdbmdelete.o:	gdbmdefs.h gdbmerrno.h
+gdbmfetch.o:	gdbmdefs.h gdbmerrno.h
+gdbmopen.o:	gdbmdefs.h gdbmerrno.h
+gdbmreorg.o:	gdbmdefs.h gdbmerrno.h extern.h
+gdbmseq.o:	gdbmdefs.h
+gdbmstore.o:	gdbmdefs.h gdbmerrno.h
+
+# gdbm support files
+bucket.o:	gdbmdefs.h
+falloc.o:	gdbmdefs.h
+findkey.o:	gdbmdefs.h
+global.o:	gdbmdefs.h gdbmerrno.h
+hash.o:		gdbmdefs.h
+update.o:	gdbmdefs.h
+version.o:
+extern.h:
+gdbmdefs.h:	gdbmconst.h systems.h
+		touch gdbmdefs.h
+
+# other programs
+testgdbm.o:	gdbmdefs.h extern.h gdbmerrno.h systems.h
+testdbm.o:
+testndbm.o:	ndbm.h

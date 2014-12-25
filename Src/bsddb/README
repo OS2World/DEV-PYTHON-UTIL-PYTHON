@@ -1,0 +1,16 @@
+This is an adaption of the BSD DB library supplied by Eberhard Mattes in 
+the EMXBSD archive within the EMX tool suite.
+
+I have changed the makefiles to use GNU make (rather than dmake), and 
+made changes to support linkage to multithreaded apps.
+
+The multithread support required source changes in 3 files in the hash 
+directory.
+
+All new makefiles are included in directory structure matching the original,
+with context diffs for the changed source files.
+
+Andrew MacIntyre
+<andymac@bullseye.apana.org.au>
+<andymac@pcug.org.au>
+March 26, 2001

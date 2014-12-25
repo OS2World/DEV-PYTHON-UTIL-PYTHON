@@ -1,0 +1,30 @@
+This archive contains the collection of patches and replacement makefiles 
+I used in creating this port of Python 2.4.2 for OS/2.
+
+Each directory under the Src directory contains the files for a particular 
+source distribution:-
+
+- bsddb       (source patches and makefiles for the BSD DB library 
+               distributed with EMX)
+- gdbm        (revised makefile for Kai Uwe Rommel's port of GNU 
+               GDBM 1.7.3 to OS/2)
+- gnuufc      (revised makefile for Kai Uwe Rommel's port of GNU 
+               Ultra Fast Crypt to OS/2)
+- readline    (revised makefile for Kai Uwe Rommel's port of GNU 
+               Readline to OS/2)
+- zlib        (makefile for EMX to build zlib 1.2.3 static library on OS/2)
+
+Complete replacement makefiles are provided, and context patches have been 
+generated for changed C and Python source files.
+
+My bzip2 port, including the source patches & Makefile is available from 
+http://www.andymac.org/libraries.html
+
+The Src directory also contains the Makefile used for the binary
+distribution (Makefile.242).
+
+
+Andrew MacIntyre
+<andymac@bullseye.apana.org.au>
+http://www.andymac.org/
+9 October, 2005

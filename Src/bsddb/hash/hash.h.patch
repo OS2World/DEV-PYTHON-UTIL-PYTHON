@@ -1,0 +1,18 @@
+*** hash.h.orig	Mon Nov  6 00:34:10 1995
+--- hash.h	Sun Mar 11 09:35:32 2001
+***************
+*** 103,110 ****
+--- 103,115 ----
+  	BUFHEAD 	*cpage;		/* Current page */
+  	int		cbucket;	/* Current bucket */
+  	int		cndx;		/* Index of next item on cpage */
++ #if defined(__EMX__) && (defined(__MT__) || defined(__ST_MT_ERRNO__))
++ 	int		error_no;	/* Error Number -- for DBM 
++ 					 * compatability */
++ #else
+  	int		errno;		/* Error Number -- for DBM 
+  					 * compatability */
++ #endif
+  	int		new_file;	/* Indicates if fd is backing store 
+  					 * or no */
+  	int		save_file;	/* Indicates whether we need to flush 

@@ -1,0 +1,9 @@
+A replacement makefile for Kai Uwe Rommel's port of GNU Ultra Fast Crypt.
+
+This version builds a multithread compatible library, in both a.out (.a) 
+and OMF (.lib) forms.  No source changes were made to KUR's port.
+
+Andrew MacIntyre
+andymac@bullseye.apana.org.au
+http://www.andymac.org/
+5 August, 2001.

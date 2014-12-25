@@ -1,0 +1,12 @@
+Because I wanted to statically link the zlib library to avoid clashes with 
+the numerous incompatible DLLs floating around the Internet, I modified 
+the OS2 EMX specific makefile included with the zlib 1.2.3 distribution 
+to build only static libraries with multithreading support and fairly 
+conservative optimisation.
+
+No source changes were necessary.
+
+Andrew MacIntyre
+<andymac@bullseye.apana.org.au>
+<andymac@pcug.org.au>
+October 9, 2005

@@ -1,0 +1,10 @@
+Kai Uwe Rommel's port of GNU GDBM required several build changes:
+
+- build with support for linking to multithreaded apps;
+- include gdbmexists.o file into the library, as its needed by Python's 
+  gdbm module.
+
+Andrew MacIntyre
+<andymac@bullseye.apana.org.au>
+<andymac@pcug.org.au>
+March 26, 2001

@@ -1,0 +1,30 @@
+*** ndbm.c.orig	Thu Dec 22 00:05:56 1994
+--- ndbm.c	Sun Mar 11 09:38:10 2001
+***************
+*** 180,186 ****
+--- 180,190 ----
+  	HTAB *hp;
+  
+  	hp = (HTAB *)db->internal;
++ #if defined(__EMX__) && (defined(__MT__) || defined(__ST_MT_ERRNO__))
++ 	return (hp->error_no);
++ #else
+  	return (hp->errno);
++ #endif
+  }
+  
+  extern int
+***************
+*** 190,196 ****
+--- 194,204 ----
+  	HTAB *hp;
+  
+  	hp = (HTAB *)db->internal;
++ #if defined(__EMX__) && (defined(__MT__) || defined(__ST_MT_ERRNO__))
++ 	hp->error_no = 0;
++ #else
+  	hp->errno = 0;
++ #endif
+  	return (0);
+  }
+  

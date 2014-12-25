@@ -1,0 +1,12 @@
+DBLIB = ../db.a
+CC = gcc -O -I../include -D__DBINTERFACE_PRIVATE -D__ST_MT_ERRNO__
+
+.c.o:
+	$(CC) -c $<
+
+$(DBLIB): $(OBJS)
+	ar d $(DBLIB) __.SYMDEF	
+	ar r $(DBLIB) $(OBJS)
+	ar s $(DBLIB)
+
+all: $(DBLIB)

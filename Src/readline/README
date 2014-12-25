@@ -1,0 +1,7 @@
+Kai Uwe Rommel's GNU Readline port required changes to the Makefile 
+to include support for linking to a multithreaded app.
+
+Andrew MacIntyre
+<andymac@bullseye.apana.org.au>
+<andymac@pcug.org.au>
+March 26, 2001
